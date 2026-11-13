@@ -6,6 +6,8 @@ node_modules/
 # Build outputs
 dist/
 build/
+.dev-dist/
+dev-dist/
 .cache/
 
 # IDE

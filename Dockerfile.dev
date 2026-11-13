@@ -10,20 +10,20 @@ WORKDIR /app
 # Install git (for npm packages that need it)
 RUN apk add --no-cache git
 
-# Copy package files
+# Copy package files only (source files will be mounted via volume)
 COPY package*.json ./
 
 # Install dependencies (including devDependencies)
 RUN npm ci
 
-# Copy source files (excluding node_modules and files in .dockerignore)
-COPY . .
+# Create a dummy .git directory to prevent permission issues
+RUN mkdir -p .git && chown -R node:node .git
 
 # Expose development port
 EXPOSE 4654
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=5 \
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries= 5 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:4654 || exit 1
 
 # Start development server with hot reload
