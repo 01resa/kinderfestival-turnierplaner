@@ -1,0 +1,73 @@
+{
+  "name": "kinderfestival-turnierplaner",
+  "version": "1.0.0",
+  "description": "Eine Progressive Web App (PWA) zur Planung von Turnieren für F-Jugend-Teams (U7/U8) im Rahmen von Kinderfestivals.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext .svelte,.ts,.tsx,.js,.jsx",
+    "format": "prettier --write .",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "exports": {},
+  "files": [
+    "dist",
+    "static",
+    "package.json",
+    "Dockerfile",
+    "compose.yaml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "pwa",
+    "turnierplaner",
+    "kinderfestival",
+    "fussball",
+    "scheduling",
+    "svelte",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "idb": "^8.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/svelte": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "^2.35.0",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-svelte": "^3.2.2",
+    "svelte": "^5.0.0",
+    "svelte-check": "^3.6.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0",
+    "vite-plugin-pwa": "^0.20.0",
+    "vitest": "^1.3.0",
+    "workbox-build": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-window": "^7.0.0"
+  }
+}
