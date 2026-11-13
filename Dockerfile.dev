@@ -16,7 +16,7 @@ COPY package*.json ./
 # Install dependencies (including devDependencies)
 RUN npm ci
 
-# Copy source files (excluding node_modules to avoid conflicts with volume mount)
+# Copy source files (excluding node_modules and files in .dockerignore)
 COPY . .
 
 # Expose development port

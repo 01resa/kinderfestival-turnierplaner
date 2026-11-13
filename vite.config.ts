@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+	base: '/',
 	plugins: [
 		svelte(),
 		VitePWA({
@@ -51,7 +52,10 @@ export default defineConfig({
 	server: {
 		host: '0.0.0.0',
 		port: parseInt(process.env.VITE_APP_PORT || '4654'),
-		strictPort: true
+		strictPort: true,
+		fs: {
+			strict: false
+		}
 	},
 	build: {
 		outDir: 'dist',
