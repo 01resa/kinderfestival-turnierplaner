@@ -50,7 +50,7 @@ RUN mkdir -p /etc/nginx/certs && \
     -subj "/C=DE/ST=Bavaria/L=Munich/O=Kinderfestival/OU=IT/CN=kinderfestival-turnierplaner" 2>/dev/null || true
 
 # Copy built files from builder
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy static files
 COPY static/ /usr/share/nginx/html/static/

@@ -11,7 +11,7 @@
 	 */
 	
 	import { onMount, onDestroy } from 'svelte';
-	import type { Match, Team, Club, Field } from '$lib/models/types';
+	import type { Match, Team, Club, Field } from '../models/types';
 	
 	// Props
 	interface Props {
@@ -437,16 +437,11 @@
 
 <!-- Helper Functions für Template -->
 {#snippet generateTimeMarkers(baseTime: number, totalMinutes: number, isHorizontal: boolean)}
-	{#array}
-		{#each [0, 0.25, 0.5, 0.75, 1] as fraction}
-			{% const timeInMs = baseTime + (fraction * totalMinutes * 60 * 1000);
-			const date = new Date(timeInMs);
-			const label = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-			
-			{ position: fraction * 100, label }
-		}
-		{/each}
-	{/array}
+	{#each [0, 0.25, 0.5, 0.75, 1] as fraction}
+		<span class="time-marker" style="left: {fraction * 100}%">
+			{new Date(baseTime + (fraction * totalMinutes * 60 * 1000)).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+		</span>
+	{/each}
 {/snippet}
 
 {#snippet calculatePosition(time: number, baseTime: number, totalMinutes: number)}

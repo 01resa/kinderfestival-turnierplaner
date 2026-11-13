@@ -1,10 +1,10 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
 	plugins: [
-		sveltekit(),
+		svelte(),
 		VitePWA({
 			registerType: 'prompt',
 			includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
@@ -29,9 +29,6 @@ export default defineConfig({
 				]
 			},
 			workbox: {
-				globs: [
-					'**/*.{js,css,html,ico,png,svg,woff2}'
-				],
 				runtimeCaching: [
 					{
 						urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -44,7 +41,26 @@ export default defineConfig({
 						}
 					}
 				]
+			},
+			devOptions: {
+				enabled: true,
+				type: 'module'
 			}
 		})
-	]
+	],
+	server: {
+		host: '0.0.0.0',
+		port: parseInt(process.env.VITE_APP_PORT || '5173'),
+		strictPort: true
+	},
+	build: {
+		outDir: 'dist',
+		emptyOutDir: true,
+		rollupOptions: {
+			input: {
+				main: './index.html'
+			}
+		}
+	},
+	resolve: {}
 });

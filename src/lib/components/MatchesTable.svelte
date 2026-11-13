@@ -10,7 +10,7 @@
 	 * - Markierungen (Derby, Wiederholung, Konflikte)
 	 */
 	
-	import type { Match, Team, Club, Field } from '$lib/models/types';
+	import type { Match, Team, Club, Field } from '../models/types';
 	
 	// Props
 	interface Props {

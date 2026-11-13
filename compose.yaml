@@ -5,7 +5,7 @@ version: '3.8'
 # ============================================================================
 
 services:
-  # Hauptanwendung
+  # Produktionsanwendung
   turnierplaner:
     build:
       context: .
@@ -17,7 +17,6 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
-      - "8443:8443"
     environment:
       # Application Settings
       - NODE_ENV=production
@@ -28,15 +27,13 @@ services:
       # Security Settings
       - NGINX_ENABLE_HTTPS=false
       - NGINX_HTTP_PORT=8080
-      - NGINX_HTTPS_PORT=8443
       
       # Logging
       - LOG_LEVEL=info
-      - LOG_FORMAT=combined
     volumes:
-      # Persistente Daten (falls benötigt für zukünftige Backend-Integration)
-      - ./data:/var/www/data
-      # SSL Zertifikate
+      # Static files for development hot reload
+      - ./dist:/usr/share/nginx/html:ro
+      # SSL Zertifikate (optional)
       - ./certs:/etc/nginx/certs:ro
       # Nginx Konfiguration
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
@@ -47,19 +44,11 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.turnierplaner.rule=Host(`turnierplaner.localhost`)"
-      - "traefik.http.routers.turnierplaner.entrypoints=web"
-      - "traefik.http.services.turnierplaner.loadbalancer.server.port=8080"
-    
-    # Entwicklungsumgebung
-    # Override mit: docker compose -f compose.yaml -f compose.dev.yaml up
+      start_period: 15s
     profiles:
       - production
 
-  # Entwicklungsserver (optional)
+  # Entwicklungsserver
   dev-server:
     build:
       context: .
@@ -72,13 +61,19 @@ services:
     environment:
       - NODE_ENV=development
       - VITE_APP_PORT=5173
+      - HMR_HOST=0.0.0.0
     volumes:
+      # Source code for hot reload
       - .:/app
-      - /app/node_modules
+      # Node modules volume to persist dependencies
+      - node_modules:/app/node_modules
     networks:
       - turnierplaner-network
     profiles:
       - development
+    # Use host network for HMR to work properly
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 # ============================================================================
 # NETWORK
@@ -88,14 +83,10 @@ networks:
   turnierplaner-network:
     name: kinderfestival-turnierplaner-network
     driver: bridge
-    internal: false
 
 # ============================================================================
 # VOLUMES
 # ============================================================================
 
 volumes:
-  # Persistente Daten
-  turnierplaner-data:
-    name: kinderfestival-turnierplaner-data
-    driver: local
+  node_modules:

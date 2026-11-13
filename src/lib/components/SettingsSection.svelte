@@ -14,6 +14,7 @@
 	import {
 		clubs,
 		teams,
+		teamsByClub,
 		fields,
 		config,
 		schedule,
@@ -30,10 +31,10 @@
 		updateConfig,
 		setCurrentStep,
 		toggleSettingsExpanded
-	} from '$lib/stores/tournamentStore';
+	} from '../stores/tournamentStore';
 	
 	// Typen
-	import type { FieldType } from '$lib/models/types';
+	import type { FieldType } from '../models/types';
 	
 	// Props
 	interface Props {

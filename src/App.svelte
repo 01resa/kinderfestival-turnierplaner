@@ -8,8 +8,10 @@
 	 * 3. Unten: Grafische Spielfeld-Darstellung
 	 */
 	
-	import { onMount, afterUpdate } from 'svelte';
-	import { browser } from '$app/environment';
+	import { onMount, onDestroy } from 'svelte';
+	
+	// Browser detection (replacement for $app/environment)
+	const browser = typeof window !== 'undefined';
 	
 	// Stores
 	import {
@@ -23,25 +25,25 @@
 		uiState,
 		setCurrentStep,
 		toggleSettingsExpanded
-	} from '$lib/stores/tournamentStore';
+	} from './lib/stores/tournamentStore';
 	
 	// Services
-	import { loadTournamentState, saveTournamentState, triggerAutoSave, cancelAutoSave } from '$lib/services/storageService';
+	import { loadTournamentState, saveTournamentState, triggerAutoSave, cancelAutoSave } from './lib/services/storageService';
 	
 	// Komponenten
-	import SettingsSection from '$lib/components/SettingsSection.svelte';
-	import MatchesTable from '$lib/components/MatchesTable.svelte';
-	import FieldGrid from '$lib/components/FieldGrid.svelte';
-	import TutorialOverlay from '$lib/components/TutorialOverlay.svelte';
-	import ActionBar from '$lib/components/ActionBar.svelte';
+	import SettingsSection from './lib/components/SettingsSection.svelte';
+	import MatchesTable from './lib/components/MatchesTable.svelte';
+	import FieldGrid from './lib/components/FieldGrid.svelte';
+	import TutorialOverlay from './lib/components/TutorialOverlay.svelte';
+	import ActionBar from './lib/components/ActionBar.svelte';
 	
 	// Algorithmus
-	import { generateSchedule } from '$lib/algorithms/scheduling';
-	import { getTournamentState as getCurrentState } from '$lib/stores/tournamentStore';
+	import { generateSchedule } from './lib/algorithms/scheduling';
+	import { getTournamentState as getCurrentState } from './lib/stores/tournamentStore';
 	
 	// State
 	let isLoading = true;
-	let showTutorial = false;
+	let showTutorial = $state(false);
 	
 	// Lade den Zustand beim Start
 	onMount(async () => {
@@ -58,12 +60,24 @@
 				}
 			});
 			
+			// Beforeunload-Handler für Speichern
+			const handleBeforeUnload = () => {
+				const state = getTournamentState();
+				saveTournamentState(state);
+			};
+			
+			window.addEventListener('beforeunload', handleBeforeUnload);
+			
 			isLoading = false;
+			
+			// Cleanup
+			return () => {
+				window.removeEventListener('beforeunload', handleBeforeUnload);
+			};
 		}
 	});
 	
 	// Speichere beim Beenden
-	import { onDestroy } from 'svelte';
 	onDestroy(() => {
 		cancelAutoSave();
 		if (browser) {
@@ -117,31 +131,37 @@
 		}
 	}
 	
-	// Füge Key Event Listener hinzu
-	if (browser) {
-		window.addEventListener('keydown', handleKeydown);
-	}
+	// Event-Listener für Tastatur
+	let keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 	
-	// Cleanup
-	onDestroy(() => {
+	onMount(() => {
 		if (browser) {
-			window.removeEventListener('keydown', handleKeydown);
+			keydownHandler = handleKeydown;
+			window.addEventListener('keydown', keydownHandler);
+		}
+	});
+	
+	onDestroy(() => {
+		if (keydownHandler && browser) {
+			window.removeEventListener('keydown', keydownHandler);
 		}
 	});
 </script>
 
-<svelte:head>
-	<title>Kinderfestival Turnierplaner</title>
-	<meta name="description" content="Turnierplanung für F-Jugend Teams (U7/U8)" />
-	<meta name="theme-color" content="#6750a4" />
-</svelte:head>
-
-<svelte:window on:beforeunload={() => {
+<script lang="ts" module>
+	// Set document title and meta tags
 	if (browser) {
-		const state = getTournamentState();
-		saveTournamentState(state);
+		document.title = 'Kinderfestival Turnierplaner';
+		const metaDesc = document.querySelector('meta[name="description"]');
+		if (metaDesc) {
+			metaDesc.setAttribute('content', 'Turnierplanung für F-Jugend Teams (U7/U8)');
+		}
+		const metaTheme = document.querySelector('meta[name="theme-color"]');
+		if (metaTheme) {
+			metaTheme.setAttribute('content', '#6750a4');
+		}
 	}
-}} />
+</script>
 
 <div class="app-container">
 	<!-- Action Bar - Oben -->

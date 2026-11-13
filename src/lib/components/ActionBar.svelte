@@ -11,12 +11,12 @@
 	import type { Writable } from 'svelte/store';
 	
 	// Stores
-	import { tournamentState } from '$lib/stores/tournamentStore';
+	import { tournamentState } from '../stores/tournamentStore';
 	
 	// Services
-	import { downloadAsFile, importFromFile } from '$lib/services/storageService';
-	import { generateSchedule, isSchedulePossible } from '$lib/algorithms/scheduling';
-	import { getTournamentState } from '$lib/stores/tournamentStore';
+	import { downloadAsFile, importFromFile } from '../services/storageService';
+	import { generateSchedule, isSchedulePossible } from '../algorithms/scheduling';
+	import { getTournamentState } from '../stores/tournamentStore';
 	
 	// Props
 	interface Props {
