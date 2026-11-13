@@ -50,7 +50,7 @@ export default defineConfig({
 	],
 	server: {
 		host: '0.0.0.0',
-		port: parseInt(process.env.VITE_APP_PORT || '5173'),
+		port: parseInt(process.env.VITE_APP_PORT || '4654'),
 		strictPort: true
 	},
 	build: {

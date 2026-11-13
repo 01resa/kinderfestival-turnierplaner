@@ -233,7 +233,7 @@ jobs:
         run: sleep 30
         
       - name: Test HTTP Endpoint
-        run: curl -f http://localhost:8080 || exit 1
+        run: curl -f http://localhost:4654 || exit 1
         
       - name: Stop Docker Compose
         if: always()

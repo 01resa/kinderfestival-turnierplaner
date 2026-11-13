@@ -4,7 +4,7 @@
   "description": "Eine Progressive Web App (PWA) zur Planung von Turnieren für F-Jugend-Teams (U7/U8) im Rahmen von Kinderfestivals.",
   "type": "module",
   "scripts": {
-    "dev": "vite dev --host 0.0.0.0 --port 5173",
+    "dev": "vite dev --host 0.0.0.0 --port 4654",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "check": "svelte-check --tsconfig ./tsconfig.json",

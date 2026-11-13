@@ -40,7 +40,7 @@ FROM nginx:stable-alpine AS production
 # Set environment variables
 ENV NODE_ENV=production
 ENV APP_NAME="Kinderfestival Turnierplaner"
-ENV APP_PORT=8080
+ENV APP_PORT=4654
 
 # Install dummy certificates for development (will be overridden by real certs)
 RUN mkdir -p /etc/nginx/certs && \
@@ -63,7 +63,7 @@ COPY docker/healthcheck.sh /usr/local/bin/healthcheck.sh
 RUN chmod +x /usr/local/bin/healthcheck.sh
 
 # Expose port
-EXPOSE 8080
+EXPOSE 4654
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
