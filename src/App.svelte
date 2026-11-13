@@ -43,7 +43,7 @@
 	
 	// State
 	let isLoading = true;
-	let showTutorial = $state(false);
+	let showTutorial = false;
 	
 	// Lade den Zustand beim Start
 	onMount(async () => {
